@@ -32,11 +32,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Locuro\\RiderProjects\\Droch1\\Client\\Client.csproj",
+      "projectUniqueName": "C:\\Users\\Locuro\\RiderProjects\\3g0rDroch1\\Client\\Client.csproj",
       "projectName": "Client",
-      "projectPath": "C:\\Users\\Locuro\\RiderProjects\\Droch1\\Client\\Client.csproj",
+      "projectPath": "C:\\Users\\Locuro\\RiderProjects\\3g0rDroch1\\Client\\Client.csproj",
       "packagesPath": "C:\\Users\\Locuro\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Locuro\\RiderProjects\\Droch1\\Client\\obj\\",
+      "outputPath": "C:\\Users\\Locuro\\RiderProjects\\3g0rDroch1\\Client\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Locuro\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -51,8 +51,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\Locuro\\RiderProjects\\Droch1\\ClassLibrary\\ClassLibrary.csproj": {
-              "projectPath": "C:\\Users\\Locuro\\RiderProjects\\Droch1\\ClassLibrary\\ClassLibrary.csproj"
+            "C:\\Users\\Locuro\\RiderProjects\\3g0rDroch1\\ClassLibrary\\ClassLibrary.csproj": {
+              "projectPath": "C:\\Users\\Locuro\\RiderProjects\\3g0rDroch1\\ClassLibrary\\ClassLibrary.csproj"
             }
           }
         }
@@ -72,16 +72,35 @@
           "net47",
           "net471",
           "net472",
-          "net48"
+          "net48",
+          "net481"
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[6.0.12, 6.0.12]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.win-x64",
+            "version": "[6.0.12, 6.0.12]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[6.0.12, 6.0.12]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[6.0.12, 6.0.12]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }

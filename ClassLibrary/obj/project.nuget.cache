@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "QZYAvbogWw1u+c+bYJdx82o5HgJeUoDMDLqc2h2PUNLszkpB6uk0zKli2+SaBGV4g69PmQLjI0ACNOhOXGGvng==",
+  "dgSpecHash": "qyJkofhpxvabe8EUOd4H768E1oqX6M051Z6WJ7HnOaekq8oWeMW6wVzrvNzfD9WMwo2DMYYwEBJKpqX+qAhoGg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Locuro\\RiderProjects\\Droch1\\ClassLibrary\\ClassLibrary.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\Locuro\\RiderProjects\\3g0rDroch1\\ClassLibrary\\ClassLibrary.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Locuro\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.12\\microsoft.netcore.app.ref.6.0.12.nupkg.sha512",
+    "C:\\Users\\Locuro\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.12\\microsoft.windowsdesktop.app.ref.6.0.12.nupkg.sha512",
+    "C:\\Users\\Locuro\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.12\\microsoft.aspnetcore.app.ref.6.0.12.nupkg.sha512"
+  ],
   "logs": []
 }

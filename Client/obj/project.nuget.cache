@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "zykfHYxow58QNVQRejsdsy1tWLBUklYQFN6apcuDjS2gMkPylQ0iwVaUKjUaCIYT6TcmARjzqilqzGhxdP8SFg==",
+  "dgSpecHash": "9Wccu5enq9U6OYl6/lKNqJ1aPHQuaFc559ciJGgksL+W4d+/tKKm7AxnEX7pTsRC6qX7+p4cAqH04LdlWv2eLA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Locuro\\RiderProjects\\Droch1\\Client\\Client.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\Locuro\\RiderProjects\\3g0rDroch1\\Client\\Client.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Locuro\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.12\\microsoft.netcore.app.ref.6.0.12.nupkg.sha512",
+    "C:\\Users\\Locuro\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.12\\microsoft.windowsdesktop.app.ref.6.0.12.nupkg.sha512",
+    "C:\\Users\\Locuro\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.12\\microsoft.aspnetcore.app.ref.6.0.12.nupkg.sha512",
+    "C:\\Users\\Locuro\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.12\\microsoft.netcore.app.host.win-x64.6.0.12.nupkg.sha512"
+  ],
   "logs": []
 }
