@@ -44,7 +44,6 @@ public class PipeClient
 
         Console.WriteLine("Connecting to server...\n");
 
-        Console.WriteLine(pipeClient.NumberOfServerInstances);
         TryToConnect(pipeClient);
 
         if (CheckLoginInfoCorrect(infoToCheck, pipeClient))
