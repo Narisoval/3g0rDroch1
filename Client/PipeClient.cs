@@ -1,4 +1,6 @@
-﻿namespace Droch1;
+﻿using static ClassLibrary.CommunicationCodes;
+
+namespace Droch1;
 
 using System;
 using System.IO;
@@ -6,7 +8,6 @@ using System.IO.Pipes;
 using System.Security.Principal;
 using System.Threading;
 using ClassLibrary;
-
 public class PipeClient
 {
     private static List<Task> clients;
@@ -45,12 +46,20 @@ public class PipeClient
         Console.WriteLine("Connecting to server...\n");
 
         TryToConnect(pipeClient);
+        StreamString ss = new StreamString(pipeClient);
 
-        if (CheckLoginInfoCorrect(infoToCheck, pipeClient))
+        if (CheckLoginInfoCorrect(infoToCheck, ss))
             Console.WriteLine("Correct INFO!!!");
         else
             Console.WriteLine("Wrong INFO((");
+        
+        if (CheckLoginInfoCorrect(infoToCheck, ss))
+                Console.WriteLine("Correct INFO!!!");
+        else
+            Console.WriteLine("Wrong INFO((");
 
+
+        ss.WriteString(CLIENT_DISCONNECTED);
         pipeClient.Close();
 
     }
@@ -69,11 +78,10 @@ public class PipeClient
         }
     }
 
-    private static bool CheckLoginInfoCorrect(LoginInfo loginInfo, NamedPipeClientStream pipeClientStream)
+    private static bool CheckLoginInfoCorrect(LoginInfo loginInfo, StreamString streamString )
     {
-        var ss = new StreamString(pipeClientStream);
-        ss.WriteString(loginInfo.ToString());
-        return ss.ReadString() == "1";
+        streamString.WriteString(loginInfo.ToString());
+        return streamString.ReadString() == "1";
     }
 
     private static List<LoginInfo> GenerateLoginInfos()
@@ -82,9 +90,7 @@ public class PipeClient
 
         // populate list with test data
         loginInfos.Add(new LoginInfo("log`n", "password"));
-        loginInfos.Add(new LoginInfo("joder", "abc122"));
-        loginInfos.Add(new LoginInfo("login", "password"));
-        loginInfos.Add(new LoginInfo("joder", "abc122"));
+        loginInfos.Add(new LoginInfo("perder", "123"));
         loginInfos.Add(new LoginInfo("login", "password"));
         return loginInfos;
     }

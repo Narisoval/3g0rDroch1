@@ -1,11 +1,13 @@
 ﻿using System.IO.Pipes;
 using ClassLibrary;
+using Microsoft.VisualBasic.Logging;
+using static ClassLibrary.CommunicationCodes;
 
 namespace Server;
 
 public class PipeServer
 {
-    private static int numThreads = 6;
+    private static int numThreads = 3;
 
     private static List<LoginInfo> _loginInfosFromFile;
     
@@ -66,25 +68,17 @@ public class PipeServer
             // written to the pipe its security token will be available.
             StreamString ss = new StreamString(pipeServer);
 
-            // get login and password from user
-            string[] loginInfoArrayFromClient = ss.ReadString().Split(" ");
-
-            try
+            // get login and password from useri
+            string stringFromClient = ss.ReadString();
+            while (stringFromClient != CLIENT_DISCONNECTED)
             {
-                LoginInfo loginInfoFromClient = new LoginInfo(loginInfoArrayFromClient[0],
-                    loginInfoArrayFromClient[1]);
-                ss.WriteString(_loginInfosFromFile.Contains(loginInfoFromClient) ? "1" : "0");
-            }
-            catch (Exception e)
-            {
-                if(e is IndexOutOfRangeException)
-                    ss.WriteString("0");
-                else
-                {
-                    throw;
-                }
-            }
+                string[] loginInfoArray = stringFromClient.Split(" ");
+                LoginInfo infoFromClient = new LoginInfo(loginInfoArray[0], loginInfoArray[1]);
+                
+                ss.WriteString(CheckIfLoginInfoIsCorrect(infoFromClient) ? "1" : "0");
 
+                stringFromClient = ss.ReadString();
+            }
         }
         // Catch the IOException that is raised if the pipe is broken
         // or disconnected.
@@ -92,6 +86,11 @@ public class PipeServer
         {
             Console.WriteLine("ERROR: {0}", e.Message);
         }
+        
+        Console.WriteLine("\nClient disconnected on thread[{0}].", threadId);
         pipeServer.Close();
     }
+
+    private static bool CheckIfLoginInfoIsCorrect(LoginInfo info) => _loginInfosFromFile.Contains(info);
+
 }

@@ -17,7 +17,7 @@ public class StreamString
     public string ReadString()
     {
         int len = 0;
-
+        
         len = ioStream.ReadByte() * 256;
         len += ioStream.ReadByte();
         byte[] inBuffer = new byte[len];
