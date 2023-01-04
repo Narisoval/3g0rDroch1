@@ -1,6 +1,5 @@
 ﻿using System.IO.Pipes;
 using ClassLibrary;
-using Microsoft.VisualBasic.Logging;
 using static ClassLibrary.CommunicationCodes;
 
 namespace Server;
@@ -11,20 +10,14 @@ public class PipeServer
 
     private static List<LoginInfo> _loginInfosFromFile;
     
-    private static int maxPasswordLength;
-    private static int maxLoginLength;
     private static List<Task> servers;
     public static void Main()
     {
         LoginInfosFromFileReader loginInfosReader = new LoginInfosFromFileReader();
         _loginInfosFromFile = loginInfosReader.GetPasswordsFromFileDialog();
         
-        maxLoginLength = loginInfosReader.MaxLoginLength;
-        maxPasswordLength = loginInfosReader.MaxPasswordLength;
-
         servers = new List<Task>();
 
-        Console.WriteLine("\n*** Named pipe server stream with impersonation example ***\n");
         RunServers();
     }
 
@@ -89,7 +82,7 @@ public class PipeServer
         
         Console.WriteLine("\nClient disconnected on thread[{0}].", threadId);
         pipeServer.Close();
-    }
+        }
 
     private static bool CheckIfLoginInfoIsCorrect(LoginInfo info) => _loginInfosFromFile.Contains(info);
 
