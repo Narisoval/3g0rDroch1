@@ -38,7 +38,6 @@ namespace Droch1;
                     // Add a new character to the list and set all of the letter to the first ascii value
                     AddNewCharacter(ref passwordAttempt);
                 }
-                Console.WriteLine();
                 
                 yield return new LoginInfo(login, new string(passwordAttempt.ToArray()));
             }
