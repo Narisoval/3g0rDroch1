@@ -1,4 +1,5 @@
-﻿using static ClassLibrary.CommunicationCodes;
+﻿using System.Diagnostics;
+using static ClassLibrary.CommunicationCodes;
 
 namespace Droch1;
 
@@ -52,14 +53,26 @@ public class PipeClient
 
         pipeClient.Connect();
         StreamString ss = new StreamString(pipeClient);
+        Stopwatch stopWatch = new Stopwatch();
+        stopWatch.Start(); 
         foreach (LoginInfo currentLoginInfo in bruteForcer.BruteForce())
         {
-            Console.WriteLine($"Attempted password: {currentLoginInfo.Password}");
+            //Console.WriteLine($"Attempted password: {currentLoginInfo.Password}");
             bool result = CheckLoginInfoCorrect(currentLoginInfo, ss);
             if (result)
             {
                 Console.WriteLine($"Hack successful, password: {currentLoginInfo.Password}");
+                stopWatch.Stop();
+                // Get the elapsed time as a TimeSpan value.
+                TimeSpan ts = stopWatch.Elapsed;
+
+                // Format and display the TimeSpan value.
+                string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                    ts.Hours, ts.Minutes, ts.Seconds,
+                    ts.Milliseconds / 10);
+                Console.WriteLine("RunTime " + elapsedTime); 
                 break;                
+                
             }
         }
         ss.WriteString(CLIENT_DISCONNECTED);
