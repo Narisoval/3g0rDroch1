@@ -1,4 +1,4 @@
-using ClassLibrary;
+using Core;
 
 namespace Droch1;
 

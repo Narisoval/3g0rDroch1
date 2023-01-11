@@ -1,88 +1,85 @@
 ﻿using System.IO.Pipes;
-using ClassLibrary;
-using static ClassLibrary.CommunicationCodes;
+using Core;
 
 namespace Server;
 
 public class PipeServer
 {
-    private static int numThreads = 3;
-
-    private static List<LoginInfo> _loginInfosFromFile;
+    private static List<LoginInfo>? _loginInfosFromFile;
     
-    private static List<Task> servers;
+    private static List<Task>? _servers;
+
+    private const int MaxAllowedServerInstances = 2;
     public static void Main()
+    {
+        GetLoginInfos();
+        _servers = new List<Task>();
+        RunServers();
+    }
+
+    private static void GetLoginInfos()
     {
         LoginInfosFromFileReader loginInfosReader = new LoginInfosFromFileReader();
         _loginInfosFromFile = loginInfosReader.GetPasswordsFromFileDialog();
-        
-        servers = new List<Task>();
-
-        RunServers();
     }
 
     private static void RunServers()
     {
-        Console.WriteLine("Waiting for client connect...\n");
-        CreateRunningServerThreads();
+        CreateRunningServerThread(); 
         WaitTillServersDie(); 
-        Console.WriteLine("\nServer threads exhausted, creating new ones.");
-        RunServers();
     }
     
-    private static void CreateRunningServerThreads()
+    private static void CreateRunningServerThread()
     {
-        for (int i = 0; i < numThreads; i++)
-        {
-            servers.Add(new Task(ServerThread));
-            servers[i].Start();
-        }
+        var serverThread = new Task(ServerThread);
+        serverThread.Start();
+        _servers!.Add(serverThread);
     }
     
     private static void WaitTillServersDie()
     {
-        Task.WaitAll(servers.ToArray());
-        servers = Enumerable.Empty<Task>().ToList();
+        Task.WaitAll(_servers!.ToArray());
+        _servers = Enumerable.Empty<Task>().ToList();
     }
 
     private static void ServerThread()
     {
         NamedPipeServerStream pipeServer =
-            new NamedPipeServerStream("testpipe", PipeDirection.InOut, numThreads);
+            new NamedPipeServerStream("testpipe", PipeDirection.InOut,MaxAllowedServerInstances);
 
         int threadId = Thread.CurrentThread.ManagedThreadId;
-        // Wait for a client to connect
         pipeServer.WaitForConnection();
 
         Console.WriteLine("Client connected on thread[{0}].", threadId);
+        CreateRunningServerThread();
         try
         {
-            // Read the request from the client. Once the client has
-            // written to the pipe its security token will be available.
             StreamString ss = new StreamString(pipeServer);
-
-            // get login and password from useri
-            string stringFromClient = ss.ReadString();
-            while (stringFromClient != CLIENT_DISCONNECTED)
+            
+            while (true)
             {
-                string[] loginInfoArray = stringFromClient.Split(" ");
-                LoginInfo infoFromClient = new LoginInfo(loginInfoArray[0], loginInfoArray[1]);
-                
+                var infoFromClient = GetLoginInfoFromClient(ss);
                 ss.WriteString(CheckIfLoginInfoIsCorrect(infoFromClient) ? "1" : "0");
-
-                stringFromClient = ss.ReadString();
+                if(!pipeServer.IsConnected)
+                    ServerThread();
+                    
             }
         }
-        // Catch the IOException that is raised if the pipe is broken
+        // Catch the SystemException that is raised if the pipe is broken
         // or disconnected.
-        catch (IOException e)
+        catch (SystemException e)
         {
             Console.WriteLine("ERROR: {0}", e.Message);
+            ServerThread();
         }
-        
-        Console.WriteLine("\nClient disconnected on thread[{0}].", threadId);
-        pipeServer.Close();
-        }
+    }
+    
+    private static LoginInfo GetLoginInfoFromClient(StreamString ss)
+    {
+        string stringFromClient = ss.ReadString();
+        string[] loginInfoArray = stringFromClient.Split(" ");
+        return  new LoginInfo(loginInfoArray[0], loginInfoArray[1]);
+    }
 
     private static bool CheckIfLoginInfoIsCorrect(LoginInfo info) => _loginInfosFromFile.Contains(info);
 

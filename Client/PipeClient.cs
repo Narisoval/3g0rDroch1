@@ -1,14 +1,10 @@
-﻿using System.Diagnostics;
-using static ClassLibrary.CommunicationCodes;
-
-namespace Droch1;
+﻿namespace Droch1;
 
 using System;
-using System.IO;
 using System.IO.Pipes;
+using System.Diagnostics;
 using System.Security.Principal;
-using System.Threading;
-using ClassLibrary;
+using Core;
 public class PipeClient
 {
     //private static int passwordMaxLength;
@@ -24,20 +20,23 @@ public class PipeClient
 
     private static void SelectMode()
     {
-        string inputFromUser = Console.ReadLine();
+        string? inputFromUser = Console.ReadLine();
 
-        if (inputFromUser == "1")
-            RunAsTest();
-        else if (inputFromUser == "2")
-            RunHackMode();
-        else
+        switch (inputFromUser)
         {
-            Console.WriteLine("Only 1 and 2 are sufficient options, please, refrain from using anything else");
-            SelectMode();
+            case "1":
+                RunAsTest();
+                break;
+            case "2":
+                RunHackMode();
+                break;
+            default:
+                Console.WriteLine("Only 1 and 2 are sufficient options, please, refrain from using anything else");
+                SelectMode();
+                break;
         }
     }
 
-    //
     
     private static void RunHackMode()
     {
@@ -75,7 +74,6 @@ public class PipeClient
                 
             }
         }
-        ss.WriteString(CLIENT_DISCONNECTED);
         pipeClient.Close();
     }
 
@@ -115,7 +113,6 @@ public class PipeClient
         StreamString ss = new StreamString(pipeClient);
 
         bool result = CheckLoginInfoCorrect(infoToCheck, ss);
-        ss.WriteString(CLIENT_DISCONNECTED);
         pipeClient.Close();
         return result;
 

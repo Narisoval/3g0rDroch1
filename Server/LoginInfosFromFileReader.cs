@@ -1,4 +1,4 @@
-﻿using ClassLibrary;
+﻿using Core;
 
 namespace Server;
 
@@ -8,7 +8,7 @@ public class LoginInfosFromFileReader
     public int MaxLoginLength { get; set; }
 
     private OpenFileDialog _fileDialog;
-    private List<LoginInfo> _loginInfosFromFile; 
+    private List<LoginInfo>? _loginInfosFromFile; 
     public LoginInfosFromFileReader(string initialDirectory = @"C:\Users\Locuro\RiderProjects\3g0rDroch1\")
     {
         SetUpFileDialog(initialDirectory);
@@ -23,7 +23,7 @@ public class LoginInfosFromFileReader
         _fileDialog.RestoreDirectory = true;
     }
 
-    public List<LoginInfo> GetPasswordsFromFileDialog()
+    public List<LoginInfo>? GetPasswordsFromFileDialog()
     {
         PopulateLoginInfoList();
         return _loginInfosFromFile;

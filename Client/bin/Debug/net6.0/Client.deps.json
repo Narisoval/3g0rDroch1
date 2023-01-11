@@ -8,15 +8,15 @@
     ".NETCoreApp,Version=v6.0": {
       "Client/1.0.0": {
         "dependencies": {
-          "ClassLibrary": "1.0.0"
+          "Core": "1.0.0"
         },
         "runtime": {
           "Client.dll": {}
         }
       },
-      "ClassLibrary/1.0.0": {
+      "Core/1.0.0": {
         "runtime": {
-          "ClassLibrary.dll": {}
+          "Core.dll": {}
         }
       }
     }
@@ -27,7 +27,7 @@
       "serviceable": false,
       "sha512": ""
     },
-    "ClassLibrary/1.0.0": {
+    "Core/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

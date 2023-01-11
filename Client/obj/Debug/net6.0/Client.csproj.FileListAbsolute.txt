@@ -21,8 +21,6 @@ C:\Users\Locuro\RiderProjects\3g0rDroch1\Client\bin\Debug\net6.0\Client.deps.jso
 C:\Users\Locuro\RiderProjects\3g0rDroch1\Client\bin\Debug\net6.0\Client.runtimeconfig.json
 C:\Users\Locuro\RiderProjects\3g0rDroch1\Client\bin\Debug\net6.0\Client.dll
 C:\Users\Locuro\RiderProjects\3g0rDroch1\Client\bin\Debug\net6.0\Client.pdb
-C:\Users\Locuro\RiderProjects\3g0rDroch1\Client\bin\Debug\net6.0\ClassLibrary.dll
-C:\Users\Locuro\RiderProjects\3g0rDroch1\Client\bin\Debug\net6.0\ClassLibrary.pdb
 C:\Users\Locuro\RiderProjects\3g0rDroch1\Client\obj\Debug\net6.0\Client.csproj.AssemblyReference.cache
 C:\Users\Locuro\RiderProjects\3g0rDroch1\Client\obj\Debug\net6.0\Client.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Locuro\RiderProjects\3g0rDroch1\Client\obj\Debug\net6.0\Client.AssemblyInfoInputs.cache
@@ -34,3 +32,5 @@ C:\Users\Locuro\RiderProjects\3g0rDroch1\Client\obj\Debug\net6.0\refint\Client.d
 C:\Users\Locuro\RiderProjects\3g0rDroch1\Client\obj\Debug\net6.0\Client.pdb
 C:\Users\Locuro\RiderProjects\3g0rDroch1\Client\obj\Debug\net6.0\Client.genruntimeconfig.cache
 C:\Users\Locuro\RiderProjects\3g0rDroch1\Client\obj\Debug\net6.0\ref\Client.dll
+C:\Users\Locuro\RiderProjects\3g0rDroch1\Client\bin\Debug\net6.0\Core.dll
+C:\Users\Locuro\RiderProjects\3g0rDroch1\Client\bin\Debug\net6.0\Core.pdb
