@@ -4,96 +4,75 @@ namespace Droch1;
 
     class BruteForcer
     {
-        private string login;
-        private List<char> alphabet;
-
-
+        private readonly string _login;
+        private List<char> _alphabet;
+        private List<char> _passwordAttempt;
         public BruteForcer(string login)
         {
-            this.login = login;
+            _login = login;
         }
 
         public IEnumerable<LoginInfo> BruteForce()
         {
-            bool cracked = false;
+            _passwordAttempt = new List<char>();
 
-            List<char> passwordAttempt = new List<char>();
+            _alphabet = GetAlphabet();
 
-            alphabet = GetAlphabet();
-
-            passwordAttempt.Add(alphabet[0]); // First character to be checked (if there is a minimum length, add more 0s to the list)
+            _passwordAttempt.Add(_alphabet[0]); // First character to be checked (if there is a minimum length, add more 0s to the list)
 
             while (true)
             {
                 // Get the character that needs to be updated
-                int index = GetUpdateIndex(passwordAttempt.Count - 1, passwordAttempt);
+                int index = GetUpdateIndex(_passwordAttempt.Count - 1);
 
                 if (index != -1)
                 {
                     // Update the characters in the password attempt
-                    UpdatePasswordAttempt(index, ref passwordAttempt);
+                    UpdatePasswordAttempt(index);
                 }
                 else
                 {
                     // Add a new character to the list and set all of the letter to the first ascii value
-                    AddNewCharacter(ref passwordAttempt);
+                    AddNewCharacter();
                 }
                 
-                yield return new LoginInfo(login, new string(passwordAttempt.ToArray()));
+                yield return new LoginInfo(_login, new string(_passwordAttempt.ToArray()));
             }
         }
 
-
-        /// <summary>
-        /// Add a new character to the list and set all of the existing values to the first ascii value in the ascii list
-        /// </summary>
-        /// <param name="letters"> the list of letters that make up the password attempt </param>
-        private void AddNewCharacter(ref List<char> letters)
+        // Добавление в конец списка первого символа алфавита и сброс всего пароля
+        private void AddNewCharacter()
         {
-            List<char> ascii = GetAlphabet();
+            _passwordAttempt.Add(_alphabet[0]);
 
-            letters.Add('0');
-
-            for (int i = 0; i < letters.Count; i++)
+            for (int i = 0; i < _passwordAttempt.Count; i++)
             {
-                letters[i] = ascii[0];
+                _passwordAttempt[i] = _alphabet[0];
             }
         }
-
-
-        /// <summary>
-        /// Change the character at the intended index and if there are any characters that come after the index, change those to the first ascii value
-        /// </summary>
-        /// <param name="index"> position of character being changed </param>
-        /// <param name="letters"> List of characters that make up the password attempt </param>
-        private void UpdatePasswordAttempt(int index, ref List<char> letters)
+        
+        //В текущем индексе подставляется каждый символ алфавита 
+        private void UpdatePasswordAttempt(int index)
         {
-            if (index != letters.Count - 1)
+            if (index != _passwordAttempt.Count - 1)
             {
-                for (int i = index + 1; i < letters.Count; i++)
+                for (int i = index + 1; i < _passwordAttempt.Count; i++)
                 {
-                    letters[i] = alphabet[0];
+                    _passwordAttempt[i] = _alphabet[0];
                 }
             }
 
-            letters[index]++;
+            _passwordAttempt[index]++;
         }
 
-
-        /// <summary>
-        ///  Recursive function used for checking which letter needs to be updated
-        ///  If there are no letters that can be updated, a character will need to be added to the list
-        /// </summary>
-        /// <param name="index"> the last character in the list </param>
-        /// <param name="letters"> the list of attempted characters </param>
-        /// <returns> the index of the character that needs to be incremented, -1 if a new character needs to be added </returns>
-        private int GetUpdateIndex(int index, List<char> letters)
+        private int GetUpdateIndex(int index)
         {
-            if (letters[index] == alphabet[^1])
+            if (_passwordAttempt[index] == _alphabet[^1])
             {
+                // Порорзрядное смещение налево.
                 if (index != 0)
                 {
-                    index = GetUpdateIndex(index - 1, letters);
+                    index = GetUpdateIndex(index - 1);
                 }
                 else
                     return -1;
@@ -102,7 +81,6 @@ namespace Droch1;
             return index;
 
         }
-
 
         List<char> GetAlphabet()
         {

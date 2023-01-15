@@ -53,7 +53,7 @@ public class PipeClient
             bool isLoginInfoCorrect = CheckLoginInfoCorrect(currentLoginInfo);
             if (isLoginInfoCorrect)
             {
-                Console.WriteLine($"Hack successful, password: {currentLoginInfo.Password}");
+                Console.WriteLine($"Hack successful, password:{currentLoginInfo.Password}");
                 stopWatch.Stop();
                 // Get the elapsed time as a TimeSpan value.
                 TimeSpan ts = stopWatch.Elapsed;
