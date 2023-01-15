@@ -5,17 +5,17 @@ using System.IO.Pipes;
 using System.Diagnostics;
 using System.Security.Principal;
 using Core;
+using static Core.ServerConstants;
+
 public class PipeClient
 {
-    //private static int passwordMaxLength;
+    private static NamedPipeClientStream _pipeClientStream;
+    private static StreamString _streamString;
     public static void Main(string[] args)
     {
         Console.WriteLine("\nChoose mode:\n1)Connection test;\n2)Hack mode;");
 
         SelectMode();
-        
-        Console.WriteLine("Spawning client threads...\n");
-        Console.WriteLine("\nClient processes finished, exiting.");
     }
 
     private static void SelectMode()
@@ -36,29 +36,22 @@ public class PipeClient
                 break;
         }
     }
-
     
     private static void RunHackMode()
     {
         Console.WriteLine("Enter login");
         string login = Console.ReadLine();
-        //SetPasswordMaxLengthFromUser();
+        
         BruteForcer bruteForcer = new BruteForcer(login);
-        var pipeClient =
-            new NamedPipeClientStream(".", "testpipe",
-                PipeDirection.InOut, PipeOptions.None);
-
-        Console.WriteLine("Connecting to server...\n");
-
-        pipeClient.Connect();
-        StreamString ss = new StreamString(pipeClient);
+        ConnectToServer();
+        
         Stopwatch stopWatch = new Stopwatch();
         stopWatch.Start(); 
         foreach (LoginInfo currentLoginInfo in bruteForcer.BruteForce())
         {
             //Console.WriteLine($"Attempted password: {currentLoginInfo.Password}");
-            bool result = CheckLoginInfoCorrect(currentLoginInfo, ss);
-            if (result)
+            bool isLoginInfoCorrect = CheckLoginInfoCorrect(currentLoginInfo);
+            if (isLoginInfoCorrect)
             {
                 Console.WriteLine($"Hack successful, password: {currentLoginInfo.Password}");
                 stopWatch.Stop();
@@ -71,58 +64,70 @@ public class PipeClient
                     ts.Milliseconds / 10);
                 Console.WriteLine("RunTime " + elapsedTime); 
                 break;                
-                
             }
         }
-        pipeClient.Close();
-    }
-
-    private static void SetPasswordMaxLengthFromUser()
-    {
-        Console.WriteLine("Enter the maximum password length");
-        int passwordMaxLengthFromUser;
-        bool passwordLengthSuccessfullyParsed = int.TryParse(Console.ReadLine(), out passwordMaxLengthFromUser);
-        if (passwordLengthSuccessfullyParsed)
-        {
-    //        passwordMaxLength = passwordMaxLengthFromUser;
-            return;
-        }
-        Console.WriteLine("Password length is wrong, please, try again");
-        SetPasswordMaxLengthFromUser();
-    }
-    private static void RunAsTest()
-    {
-        Console.WriteLine("Enter login");
-        string login = Console.ReadLine();
-        Console.WriteLine("Enter password");
-        string password = Console.ReadLine();
-        LoginInfo infoFromUser = new LoginInfo(login, password);
-        ClientThread(infoFromUser);
+        DisconnectFromServer();
     }
     
-    private static bool ClientThread(LoginInfo infoToCheck)
+    private static void RunAsTest()
     {
-        var pipeClient =
-            new NamedPipeClientStream(".", "testpipe",
+        var infoFromUser = GetLoginInfoFromUser();
+
+        ConnectToServer();
+        bool isLoginInfoCorrect = CheckLoginInfoCorrect(infoFromUser);
+        DisconnectFromServer();
+        
+        if (isLoginInfoCorrect)
+        {
+            Console.WriteLine("Your password login pair is right!!");    
+        }
+        else
+        {
+            Console.WriteLine("Your password login pair is wrong!!");    
+        }
+    }
+    
+    private static void ConnectToServer()
+    {
+        _pipeClientStream =
+            new NamedPipeClientStream(ServerName,PipeName,
                 PipeDirection.InOut, PipeOptions.None,
                 TokenImpersonationLevel.Impersonation);
 
         Console.WriteLine("Connecting to server...\n");
+        _streamString = new StreamString(_pipeClientStream);
+        _pipeClientStream.Connect();
+    }
 
-        pipeClient.Connect();
-        StreamString ss = new StreamString(pipeClient);
-
-        bool result = CheckLoginInfoCorrect(infoToCheck, ss);
-        pipeClient.Close();
-        return result;
-
+    private static void DisconnectFromServer()
+    {
+        _pipeClientStream.Close();
     }
     
-
-    private static bool CheckLoginInfoCorrect(LoginInfo loginInfo, StreamString streamString )
+    private static bool CheckLoginInfoCorrect(LoginInfo loginInfo)
     {
-        streamString.WriteString(loginInfo.ToString());
-        return streamString.ReadString() == "1";
+        _streamString.WriteString(loginInfo.ToString());
+        return _streamString.ReadString() == "1";
     }
+    
+    private static LoginInfo GetLoginInfoFromUser()
+    {
+        Console.WriteLine("Enter login: ");
+        string login = Console.ReadLine();
+        Console.WriteLine("Enter password: ");
+        string password = Console.ReadLine();
+        LoginInfo infoFromUser;
+        try
+        {
+            infoFromUser = new LoginInfo(login, password);
+        }
+        catch (ArgumentException e)
+        {
+            Console.WriteLine("Password or login is incorrect format. Please try to reenter them.\n");
+            return GetLoginInfoFromUser();
+        }
+        return infoFromUser;
+    }
+
     
 }

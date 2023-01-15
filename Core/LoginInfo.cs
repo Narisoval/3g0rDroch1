@@ -1,12 +1,17 @@
-﻿namespace Core ;
+﻿namespace Core;
 
 public class LoginInfo : IEquatable<LoginInfo>
 {
-    public String Password { get; set; }
-    public String Login { get; set; }
+    public string Password { get; }
+    public string Login { get; }
 
     public LoginInfo(string login, string password)
     {
+        if (login.Contains(' ') || password.Contains(' '))
+        {
+            throw new ArgumentException("Login or password can't contain whitespaces.");
+        }
+        
         Login = login;
         Password = password;
     }

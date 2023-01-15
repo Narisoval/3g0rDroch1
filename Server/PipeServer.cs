@@ -45,32 +45,30 @@ public class PipeServer
     private static void ServerThread()
     {
         NamedPipeServerStream pipeServer =
-            new NamedPipeServerStream("testpipe", PipeDirection.InOut,MaxAllowedServerInstances);
+            new NamedPipeServerStream(ServerConstants.PipeName, PipeDirection.InOut,MaxAllowedServerInstances);
 
-        int threadId = Thread.CurrentThread.ManagedThreadId;
         pipeServer.WaitForConnection();
-
-        Console.WriteLine("Client connected on thread[{0}].", threadId);
         CreateRunningServerThread();
+        int threadId = Thread.CurrentThread.ManagedThreadId;
+        Console.WriteLine($"Client connected on thread[{threadId}].");
         try
         {
             StreamString ss = new StreamString(pipeServer);
             
-            while (true)
+            while (pipeServer.IsConnected)
             {
                 var infoFromClient = GetLoginInfoFromClient(ss);
                 ss.WriteString(CheckIfLoginInfoIsCorrect(infoFromClient) ? "1" : "0");
-                if(!pipeServer.IsConnected)
-                    ServerThread();
-                    
             }
+
+            RestartServerThread(pipeServer);
         }
         // Catch the SystemException that is raised if the pipe is broken
         // or disconnected.
         catch (SystemException e)
         {
             Console.WriteLine("ERROR: {0}", e.Message);
-            ServerThread();
+            RestartServerThread(pipeServer);
         }
     }
     
@@ -78,9 +76,14 @@ public class PipeServer
     {
         string stringFromClient = ss.ReadString();
         string[] loginInfoArray = stringFromClient.Split(" ");
-        return  new LoginInfo(loginInfoArray[0], loginInfoArray[1]);
+        return new LoginInfo(loginInfoArray[0], loginInfoArray[1]);
     }
 
+    private static void RestartServerThread(NamedPipeServerStream server)
+    {
+        server.Close();
+        ServerThread();
+    }
     private static bool CheckIfLoginInfoIsCorrect(LoginInfo info) => _loginInfosFromFile.Contains(info);
 
 }
