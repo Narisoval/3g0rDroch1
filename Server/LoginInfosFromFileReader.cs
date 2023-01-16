@@ -8,17 +8,29 @@ public class LoginInfosFromFileReader
     public int MaxLoginLength { get; set; }
 
     private OpenFileDialog _fileDialog;
-    private List<LoginInfo>? _loginInfosFromFile; 
-    public LoginInfosFromFileReader(string initialDirectory = @"C:\Users\Locuro\RiderProjects\3g0rDroch1\")
+    private List<LoginInfo>? _loginInfosFromFile;
+
+    private string _title;
+    public string Title
     {
-        SetUpFileDialog(initialDirectory);
+        get => _title;
+        set
+        {
+            _title = value;
+            _fileDialog.Title = _title;
+        }
+    }
+
+    public LoginInfosFromFileReader(string title)
+    {
+        SetUpFileDialog();
+        Title = title;
         _loginInfosFromFile = new List<LoginInfo>();
     }
 
-    private void SetUpFileDialog(string initialDirectory)
+    private void SetUpFileDialog()
     {
         _fileDialog = new OpenFileDialog();
-        _fileDialog.InitialDirectory = initialDirectory;
         _fileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
         _fileDialog.RestoreDirectory = true;
     }

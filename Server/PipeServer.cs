@@ -19,7 +19,7 @@ public class PipeServer
 
     private static void GetLoginInfos()
     {
-        LoginInfosFromFileReader loginInfosReader = new LoginInfosFromFileReader();
+        LoginInfosFromFileReader loginInfosReader = new LoginInfosFromFileReader("Choose a file with password login pairs");
         _loginInfosFromFile = loginInfosReader.GetPasswordsFromFileDialog();
     }
 
@@ -67,7 +67,7 @@ public class PipeServer
         // or disconnected.
         catch (SystemException e)
         {
-            Console.WriteLine("ERROR: {0}", e.Message);
+            Console.WriteLine($"ERROR: {e.Message}. Restarting server on thread {threadId}");
             RestartServerThread(pipeServer);
         }
     }
